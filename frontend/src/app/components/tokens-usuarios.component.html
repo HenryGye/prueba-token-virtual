@@ -1,0 +1,85 @@
+<div class="container py-4">
+  <h3 class="text-center py-2">Tokens de usuarios</h3>
+  <input class="form-control my-4" type="text" placeholder="Buscar por nombre/email" (keyup)="listarUsuarios()" [(ngModel)]="filtro">
+  <table class="table align-middle text-center py-2">
+    <thead>
+      <tr>
+        <th scope="col">Nombre</th>
+        <th scope="col">Email</th>
+        <th scope="col">Dirección</th>
+        <th scope="col">Token</th>
+        <th scope="col">Fecha Creación</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of listaUsuarios">
+        <td>{{ item.nombre }}</td>
+        <td>{{ item.email }}</td>
+        <td>{{ item.direccion }}</td>
+        <td>{{ item.token }}</td>
+        <td>{{ item.expiracion | date: 'yyyy-MM-dd HH:mm:ss' }}</td>
+        <td>
+          <!-- Button trigger modal -->
+          <button type="button" class="btn btn-primary" (click)="verToken(item.id, item.token)">
+            Ver Token
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Modal -->
+  <div class="modal fade" [ngClass]="{'show':showModal}" [ngStyle]="showModal ? {'display':'block', 'background-color': 'rgba(0, 0, 0, 0.5)'} : {'display':'none'}" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="staticBackdropLabel">Generación y uso de tokens</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="toggleModal()"></button>
+        </div>
+        <div class="modal-body">
+          <!--tabla tokens generados-->
+          <h2 class="modal-title fs-6">Token actual</h2>
+          <table class="table align-middle text-center py-2">
+            <thead>
+              <tr>
+                <th scope="col">Nombre</th>
+                <th scope="col">Token</th>
+                <th scope="col">Fecha Creación</th>
+                <th scope="col">Tiempo Validez</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{{ tokenUsuario.nombre }}</td>
+                <td>{{ tokenUsuario.token }}</td>
+                <td>{{ tokenUsuario.expiracion | date: 'yyyy-MM-dd HH:mm:ss' }}</td>
+                <td>{{ tokenUsuario.tiempoCaducidadRestante }} segundos</td>
+                <!--<td>{{ tiempoCaducidadRestante }}</td>-->
+              </tr>
+            </tbody>
+          </table>
+          <!--tabla tokens usados-->
+          <h2 class="modal-title fs-6">Tokens usados</h2>
+          <table class="table align-middle text-center py-2">
+            <thead>
+              <tr>
+                <th scope="col">Token</th>
+                <th scope="col">Fecha Creación</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of listaTokensUsados">
+                <td>{{ item.token }}</td>
+                <td>{{ item.fecha | date: 'yyyy-MM-dd HH:mm:ss' }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="toggleModal()">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
